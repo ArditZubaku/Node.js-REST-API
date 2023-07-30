@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# WebStorm
+.idea/
+
+# Environment Variables
+.env
+
+# macOS
+.DS_Store
+
+# Log files
+logs/
+
+# Compiled output (if any)
+dist/
+build/
