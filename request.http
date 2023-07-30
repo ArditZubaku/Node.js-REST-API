@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "fullName": "John Doe",
   "email": "john@example.com",
-  "username": "john_doe1",
+  "username": "john_doe123",
   "password": "secret password"
 }
 
@@ -15,6 +15,10 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "username": "john_doe1",
+  "username": "john_doe123",
   "password": "secret password"
 }
+
+###
+GET {{host}}/my-profile
+Authorization: Bearer token

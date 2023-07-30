@@ -36,8 +36,8 @@ class User {
     await this.collection.insertOne(user);
   }
 
-  static async comparePasswords(passswordToCompare, hashedPassword) {
-    return await bcrypt.compare(passswordToCompare, hashedPassword);
+  static async comparePasswords(passwordToCompare, hashedPassword) {
+    return await bcrypt.compare(passwordToCompare, hashedPassword);
   }
 }
 

@@ -17,12 +17,7 @@ const register = catchAsyncErrors(async (req, res) => {
         return res.status(409).json({error: "Username already taken"});
     }
 
-    const newUser = {
-        fullName,
-        email,
-        username,
-        password,
-    };
+    const newUser = new User(fullName, email, username, password);
 
     // Save the user to the database
     await User.create(newUser);
@@ -60,4 +55,14 @@ const login = catchAsyncErrors(async (req, res) => {
 
 });
 
-module.exports = {register, login};
+const myProfile = catchAsyncErrors(async (req, res) => {
+    const {fullName, username, email} = req.user;
+
+    if (!req.user) return res.status(401).json({message: "User not authenticated."});
+
+    const profile = {fullName, username, email};
+
+    // Return the user's profile information
+    return res.status(200).json({message: "User's information:", profile});
+});
+module.exports = {register, login, myProfile};
