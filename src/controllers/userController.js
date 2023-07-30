@@ -4,25 +4,24 @@ const generateToken = require("../utils/generateToken");
 require("dotenv").config();
 
 const register = catchAsyncErrors(async (req, res) => {
-  try {
-    const { fullName, email, username, password } = req.body;
+    const {fullName, email, username, password} = req.body;
 
     // Simple input validation
     if (!fullName || !email || !username || !password) {
-      return res.status(400).json({ message: "Please fill in all fields." });
+        return res.status(400).json({message: "Please fill in all fields."});
     }
 
     // Check if the username is already taken
     const existingUser = await User.findByUsername(username);
     if (existingUser) {
-      return res.status(409).json({ error: "Username already taken" });
+        return res.status(409).json({error: "Username already taken"});
     }
 
     const newUser = {
-      fullName,
-      email,
-      username,
-      password,
+        fullName,
+        email,
+        username,
+        password,
     };
 
     // Save the user to the database
@@ -30,11 +29,35 @@ const register = catchAsyncErrors(async (req, res) => {
 
     // Generate a JWT token for the user
     const token = generateToken(newUser);
-    res.status(201).json({ message: "Registration successful.", token });
-  } catch (error) {
-    console.error("Error during user registration:", error);
-    res.status(500).json({ message: "Registration failed." });
-  }
+    res.status(201).json({message: "Registration successful.", token});
+
 });
 
-module.exports = { register };
+const login = catchAsyncErrors(async (req, res) => {
+
+    const {username, password} = req.body;
+
+    // Simple input validation
+    if (!username || !password) {
+        return res.status(400).json({message: 'Please provide username and password.'});
+    }
+
+    // Check if the user with the provided username exists in the database
+    const user = await User.findByUsername(username);
+    if (!user) {
+        return res.status(404).json({message: 'User not found.'});
+    }
+
+    const validPassword = await User.comparePasswords(password, user.password);
+    if (!validPassword) {
+        return res.status(401).json({message: 'Invalid credentials.'});
+    }
+
+    // Generate a JWT token for the user
+    const token = generateToken(user);
+
+    res.status(201).json({message: 'Logged in successfully.', token});
+
+});
+
+module.exports = {register, login};
