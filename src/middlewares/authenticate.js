@@ -1,6 +1,7 @@
 const {JWT_SECRET} = process.env;
-const catchAsyncErrors = require("./catchAsyncErrors")
+const catchAsyncErrors = require("./catchAsyncErrors");
 const verifyToken = require("../utils/verifyToken");
+const {JsonWebTokenError} = require("jsonwebtoken");
 
 const authenticate = catchAsyncErrors(async (req, res, next) => {
     const {authorization} = req.headers;
@@ -13,14 +14,18 @@ const authenticate = catchAsyncErrors(async (req, res, next) => {
         return res.status(401).send("Wrong auth header!");
     }
 
-    if (!token) {
-        return res.status(403).send("A token is required for authentication");
-    }
-    req.user = verifyToken(token, JWT_SECRET);
-    console.log(req.user)
-    // return res.status(401).send("Invalid Token");
-    return next();
+    const decodedToken = verifyToken(token, JWT_SECRET);
 
-})
+    if (decodedToken instanceof JsonWebTokenError) {
+        return res.status(401).send("Invalid token format");
+    }
+
+    if (!decodedToken) {
+        return res.status(401).send("Invalid token");
+    }
+
+    req.user = decodedToken;
+    return next();
+});
 
 module.exports = authenticate;

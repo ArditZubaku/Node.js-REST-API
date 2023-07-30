@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "fullName": "John Doe",
   "email": "john@example.com",
-  "username": "john_doe123",
+  "username": "john_doe1234",
   "password": "secret password"
 }
 
@@ -15,10 +15,29 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "username": "john_doe123",
+  "username": "john_doe1234",
   "password": "secret password"
 }
 
 ###
 GET {{host}}/my-profile
 Authorization: Bearer token
+
+###
+POST {{host}}/create-car
+Content-Type: application/json
+#Authorization: Bearer token
+
+{
+  "name": "Golf mk8",
+  "price_per_day": 40.2,
+  "year": 2015,
+  "color": "black",
+  "steering_type": "automatic",
+  "number_of_seats": 5
+}
+
+###
+GET {{host}}/rental-cars
+###
+GET {{host}}/rental-cars?year=2015
