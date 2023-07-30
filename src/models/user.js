@@ -1,4 +1,6 @@
 const { ObjectId } = require("mongodb");
+const connectToDatabase = require("../config/database");
+const bcrypt = require("bcryptjs");
 
 class User {
   constructor(fullName, email, username, password) {
