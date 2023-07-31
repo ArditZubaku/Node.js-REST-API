@@ -1,5 +1,4 @@
 const { ObjectId } = require("mongodb");
-const connectToDatabase = require("../config/database");
 const bcrypt = require("bcryptjs");
 
 class User {
@@ -17,8 +16,7 @@ class User {
     return "users";
   }
 
-  static async connect() {
-    const db = await connectToDatabase();
+  static async connect(db) {
     this.collection = db.collection(this.collectionName());
   }
 
@@ -33,7 +31,7 @@ class User {
   static async create(user) {
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(user.password, salt);
-    await this.collection.insertOne(user);
+    return  this.collection.insertOne(user);
   }
 
   static async comparePasswords(passwordToCompare, hashedPassword) {
