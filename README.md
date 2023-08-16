@@ -1,5 +1,5 @@
 
-# REST API TASK
+# REST API
 
 A simple REST API with Node.js, the Express framework and MongoDB.
 
